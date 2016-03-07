@@ -71,8 +71,8 @@ Example:
         margin-left: 50px;
       }
     </style>
-    <iron-ajax auto url="{{url}}" handle-as="json" last-response="{{response}}">
-    </iron-ajax>
+    <iron-ajax auto url="{{urlMilestones}}" handle-as="json" last-response="{{milestones}}"></iron-ajax>
+    <iron-ajax auto url="{{url}}" handle-as="json" last-response="{{response}}"></iron-ajax>
     <div id="headTitle">
       <h2>Road Map</h2>
     </div>
@@ -108,7 +108,6 @@ Example:
 <script>
 Polymer({
   is: 'road-map',
-
   properties: {
     owner: {
       type: String,
@@ -120,16 +119,15 @@ Polymer({
       value: 'hi9-',
       notify: true
     },
-    url: {
-      computed: 'computeUrl(owner, repo)'
+    urlMilestones: {
+      computed: 'computeUrl(owner, repo, 'milestones')'
+    },
+    urlIssues: {
+      computed: 'computeUrl(owner, repo, 'issues')'
     }
   },
-  computeUrlMilestones: function(owner, repo) {
-    return ['https://api.github.com/repos', owner, repo, 'milestones'].join('/');
-  },
-  computeUrlIssues: function(owner, repo) {
-    return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
+  computeUrlMilestones: function(owner, repo, obj) {
+    return ['https://api.github.com/repos', owner, repo, obj].join('/');
   }
-
 })
 </script>
