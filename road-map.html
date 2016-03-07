@@ -1,16 +1,10 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-input/paper-input.html">
 
 <!--
-An element providing a solution to no problem in particular.
+An element providing an agile board.
 
 Example:
 
@@ -21,132 +15,112 @@ Example:
 @demo demo/index.html
 @hero hero.svg
 -->
-<dom-module id="road-map">
 
-  <template>
+<dom-module id="road-map">
+<template>
     <style>
-      :host {
-        display: block;
-        box-sizing: border-box;
+      paper-material {
+        padding: 20px;
+        width: 200px;
+        height: 75px;
+        margin: 10px;
+        font-family: Roboto, Helvetica, sans-serif;
+        font-weight: 300;
       }
-  
-      .author img {
-        display: block;
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+      h3 {
+        font-family: Roboto, Helvetica, sans-serif;
+        color: #333;
+        margin: 10px;
+        font-weight: 300;
+      }
+      .column-group {
         float: left;
-        margin-right: 5px;
-        max-height: 100px;
-        max-width: 100px;
+        margin-left: 20px;
+      }
+      .milestoneDescription {
+        margin-top: 20px;
+        font-size: 12px;
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+      }
+      paper-input {
+        width: 40%;
+        float: left;
+        margin-right: 20px;
+      }
+      #input {
+        float: left;
+        margin-left: 50px;
+        margin-bottom: 20px;
+        clear: right;
+      }
+      #cols {
+        float: left;
+        clear: left;
+      }
+      h2 {
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        weight: 300;
+      }
+      #headTitle {
+        margin-left: 50px;
       }
     </style>
-    <h1>&lt;road-map&gt;</h1>
-    <content></content>
-    <p class="author">
-      <img src="{{author.image}}">
-      Cheers,<br/>
-      <span class="name">{{author.name}}</span>
-    </p>
-  </template>
+    <iron-ajax auto url="{{url}}" handle-as="json" last-response="{{response}}">
+    </iron-ajax>
+    <div id="headTitle">
+      <h2>Road Map</h2>
+    </div>
+    <div id="input">
+      <paper-input label="Github Owner" value="{{owner}}"></paper-input>
+      <paper-input label="Github Repo" value={{repo}}></paper-input>
+    </div>
+    <div id="cols">
+    <div id="col1" class="column-group">
+      <h3>Milestones</h3>
+      <template is="dom-repeat" items="{{response}}" filter="filterStory">
+        <a href="{{item.milestonehtml_url}}">
+        <paper-material elevation="1">
+          <div>
+            {{item.milestone}}
+          </div>
+          <div class="milestoneTitle">
+            {{item.milestone.title}}
+          </div>
+          <div class="milestoneDescription">
+            {{item.milestone.description}}
+          </div>
+        </paper-material>
+        </a>
+      </template>
+    </div>
 
+
+</template>
 </dom-module>
-
 <script>
+Polymer({
+  is: 'road-map',
 
-  Polymer({
-
-    is: 'road-map',
-
-    properties: {
-
-      /**
-       * `fancy` indicates that the element should don a monocle and tophat,
-       * while checking its pocket watch.
-       */
-      fancy: Boolean,
-
-      /**
-       * Describes the author of the element, but is really just an excuse to
-       * show off JSDoc annotations.
-       *
-       * @type {{name: string, image: string}}
-       */
-      author: {
-        type: Object,
-        // Use `value` to provide a default value for a property, by setting it
-        // on your element's prototype.
-        //
-        // If you provide a function, as we do here, Polymer will call that
-        // _per element instance_.
-        //
-        // We do that to ensure that each element gets its own copy of the
-        // value, rather than having it shared across all instances (via the
-        // prototype).
-        value: function() {
-          return {
-            name:  'Dimitri Glazkov',
-            image: 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg',
-          };
-        }
-      },
-
+  properties: {
+    owner: {
+      value: 'Hi9Here'
     },
-
-    // Element Lifecycle
-
-    ready: function() {
-      // `ready` is called after all elements have been configured, but
-      // propagates bottom-up. This element's children are ready, but parents
-      // are not.
-      //
-      // This is the point where you should make modifications to the DOM (when
-      // necessary), or kick off any processes the element wants to perform.
+    repo: {
+      value: 'hi9-'
     },
-
-    attached: function() {
-      // `attached` fires once the element and its parents have been inserted
-      // into a document.
-      //
-      // This is a good place to perform any work related to your element's
-      // visual state or active behavior (measuring sizes, beginning animations,
-      // loading resources, etc).
-    },
-
-    detached: function() {
-      // The analog to `attached`, `detached` fires when the element has been
-      // removed from a document.
-      //
-      // Use this to clean up anything you did in `attached`.
-    },
-
-    // Element Behavior
-
-    /**
-     * The `road-map-lasers` event is fired whenever `fireLasers` is called.
-     *
-     * @event road-map-lasers
-     * @detail {{sound: String}}
-     */
-
-    /**
-     * Sometimes it's just nice to say hi.
-     *
-     * @param {string} greeting A positive greeting.
-     * @return {string} The full greeting.
-     */
-    sayHello: function(greeting) {
-      var response = greeting || 'Hello World!';
-      return 'road-map says, ' + response;
-    },
-
-    /**
-     * Attempt to destroy this element's enemies with a beam of light!
-     *
-     * Or, at least, dispatch an event in the vain hope that someone else will
-     * do the zapping.
-     */
-    fireLasers: function() {
-      this.fire('road-map-lasers', {sound: 'Pew pew!'});
+    url: {
+      computed: 'computeUrl(owner, repo)'
     }
+  },
+  computeUrl: function(owner, repo) {
+    return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
+  }
 
-  });
-
+})
 </script>
