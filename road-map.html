@@ -21,8 +21,8 @@ Example:
     <style>
       paper-material {
         padding: 20px;
-        width: 200px;
-        height: 75px;
+        width: 400px;
+        height: 200px;
         margin: 10px;
         font-family: Roboto, Helvetica, sans-serif;
         font-weight: 300;
@@ -41,13 +41,6 @@ Example:
         float: left;
         margin-left: 20px;
       }
-      .milestoneDescription {
-        margin-top: 20px;
-        font-size: 12px;
-        position: absolute;
-        right: 20px;
-        bottom: 20px;
-      }
       paper-input {
         width: 40%;
         float: left;
@@ -63,12 +56,25 @@ Example:
         float: left;
         clear: left;
       }
-      h2 {
-        font-family: Roboto, Helvetica, Arial, sans-serif;
-        weight: 300;
+      #milestoneTitle {
+        font-size: 20px;
       }
-      #headTitle {
-        margin-left: 50px;
+      #milestoneDescription {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      #milestoneOpenissues {
+        font-size: 16px;
+      }
+      #milestoneDueon {
+        font-size: 16px;
+      }
+      #title {
+        font-size: 26px;
+      }
+      .text {
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        weight: 300 !important;
       }
     </style>
     <iron-ajax auto url="{{urlMilestones}}" handle-as="json" last-response="{{milestones}}"></iron-ajax>
@@ -82,21 +88,21 @@ Example:
     </div>
     <div id="cols">
     <div id="col1" class="column-group">
-      <h3>Milestones</h3>
+      <div id="title" class="text">Milestones</div>
       <template is="dom-repeat" items="{{response}}">
         <a href="{{item.html_url}}">
         <paper-material elevation="1">
-          <div class="milestoneTitle">
+          <div id="milestoneTitle" class="text">
             {{item.title}}
           </div>
-          <div class="milestoneDescription">
+          <div id="milestoneDescription" class="text">
             {{item.description}}
           </div>
-          <div class="milestoneOpenissues">
-            {{item.open_issues}}
+          <div id="milestoneOpenissues" class="text">
+            Open Issues {{item.open_issues}}
           </div>
-          <div class="milestoneOpenissues">
-            {{item.due_on}}
+          <div id="milestoneDueon" class="text">
+            Due Date {{item.due_on}}
           </div>
         </paper-material>
         </a>
