@@ -124,8 +124,11 @@ Polymer({
       computed: 'computeUrl(owner, repo)'
     }
   },
-  computeUrl: function(owner, repo) {
+  computeUrlMilestones: function(owner, repo) {
     return ['https://api.github.com/repos', owner, repo, 'milestones'].join('/');
+  },
+  computeUrlIssues: function(owner, repo) {
+    return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
   }
 
 })
