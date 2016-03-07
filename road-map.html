@@ -83,23 +83,25 @@ Example:
     <div id="cols">
     <div id="col1" class="column-group">
       <h3>Milestones</h3>
-      <template is="dom-repeat" items="{{response}}" filter="filterStory">
-        <a href="{{item.milestonehtml_url}}">
+      <template is="dom-repeat" items="{{response}}">
+        <a href="{{item.html_url}}">
         <paper-material elevation="1">
-          <div>
-            {{item.milestone}}
-          </div>
           <div class="milestoneTitle">
-            {{item.milestone.title}}
+            {{item.title}}
           </div>
           <div class="milestoneDescription">
-            {{item.milestone.description}}
+            {{item.description}}
+          </div>
+          <div class="milestoneOpenissues">
+            {{item.open_issues}}
+          </div>
+          <div class="milestoneOpenissues">
+            {{item.due_on}}
           </div>
         </paper-material>
         </a>
       </template>
     </div>
-
 
 </template>
 </dom-module>
@@ -109,17 +111,21 @@ Polymer({
 
   properties: {
     owner: {
-      value: 'Hi9Here'
+      type: String,
+      value: 'Hi9Here',
+      notify: true
     },
     repo: {
-      value: 'hi9-'
+      type: String,
+      value: 'hi9-',
+      notify: true
     },
     url: {
       computed: 'computeUrl(owner, repo)'
     }
   },
   computeUrl: function(owner, repo) {
-    return ['https://api.github.com/repos', owner, repo, 'issues'].join('/');
+    return ['https://api.github.com/repos', owner, repo, 'milestones'].join('/');
   }
 
 })
