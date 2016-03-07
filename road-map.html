@@ -81,7 +81,7 @@ Example:
       }
     </style>
     <iron-ajax auto url="{{urlMilestones}}" handle-as="json" last-response="{{milestones}}"></iron-ajax>
-    <iron-ajax auto url="{{url}}" handle-as="json" last-response="{{response}}"></iron-ajax>
+    <iron-ajax auto url="{{urlIssues}}" handle-as="json" last-response="{{issues}}"></iron-ajax>
     <div id="headTitle" class="text">Road Map</div>
     <div id="input">
       <paper-input label="Github Owner" value="{{owner}}"></paper-input>
@@ -90,7 +90,7 @@ Example:
     <div id="cols">
     <div id="col1" class="column-group">
       <div id="title" class="text">Milestones</div>
-      <template is="dom-repeat" items="{{response}}">
+      <template is="dom-repeat" items="{{milestones}}">
         <a href="{{item.html_url}}">
         <paper-material elevation="1">
           <div id="milestoneTitle" class="text">
@@ -105,6 +105,9 @@ Example:
           <div id="milestoneDueon" class="text">
             Due Date {{item.due_on}}
           </div>
+          <template is="dom-repeat" items="{{issuesWith(issues, item.id)}}">
+            {{item}}.
+          </template>
         </paper-material>
         </a>
       </template>
@@ -127,14 +130,25 @@ Polymer({
       notify: true
     },
     urlMilestones: {
-      computed: 'computeUrl(owner, repo, 'milestones')'
+      computed: 'computeUrl(owner, repo, "milestones")'
     },
     urlIssues: {
-      computed: 'computeUrl(owner, repo, 'issues')'
+      computed: 'computeUrl(owner, repo, "issues")'
     }
   },
-  computeUrlMilestones: function(owner, repo, obj) {
+  issuesWith: function(issues, id) {
+    theId = id
+    return issues.filter(function (item) {
+      if (item.milestone) {
+        return item.milestone.id === theId
+      } else {
+        return false
+      }
+    })
+  },
+  computeUrl: function(owner, repo, obj) {
     return ['https://api.github.com/repos', owner, repo, obj].join('/');
   }
 })
+var theId
 </script>
