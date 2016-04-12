@@ -64,9 +64,6 @@ Example:
       #title {
         font-size: 26px;
       }
-      #headTitle {
-        font-size: 30px;
-      }
       .text {
         font-family: Roboto, Helvetica, Arial, sans-serif;
         weight: 300 !important;
@@ -74,7 +71,6 @@ Example:
     </style>
     <iron-ajax auto url="{{urlMilestones}}" handle-as="json" last-response="{{milestones}}"></iron-ajax>
     <iron-ajax auto url="{{urlIssues}}" handle-as="json" last-response="{{issues}}"></iron-ajax>
-    <div id="headTitle" class="text">Road Map</div>
     <div id="input">
       <paper-input label="Github Owner" value="{{owner}}"></paper-input>
       <paper-input label="Github Repo" value={{repo}}></paper-input>
